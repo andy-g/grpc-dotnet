@@ -21,6 +21,15 @@ namespace GrpcGreeter
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    // Require this on MacOs as Kestrel doesn't support HTTP/2 with TLS on macOS
+                    // https://docs.microsoft.com/en-us/aspnet/core/grpc/troubleshoot?view=aspnetcore-5.0#unable-to-start-aspnet-core-grpc-app-on-macos
+                    webBuilder.ConfigureKestrel(options =>
+                    {
+                        // Setup a HTTP/2 endpoint without TLS.
+                        options.ListenLocalhost(5000, o => o.Protocols =
+                            Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2);
+                    });
+
                     webBuilder.UseStartup<Startup>();
                 });
     }

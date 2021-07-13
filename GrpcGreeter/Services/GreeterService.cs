@@ -17,6 +17,8 @@ namespace GrpcGreeter
 
         public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
         {
+            // _logger.LogInformation("Received SayHello Request: {0}", request.Name);
+            _logger.LogInformation($"Received SayHello Request. Name: {request.Name}");
             return Task.FromResult(new HelloReply
             {
                 Message = "Hello " + request.Name
